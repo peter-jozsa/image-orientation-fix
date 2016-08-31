@@ -4,6 +4,7 @@ class OFImage {
 	protected $filePath;
 	protected $resource;
 	protected $exif;
+	protected $dirty = FALSE;
 
 	const IMG_FLIP_HORIZONTAL = 1;
 	const IMG_FLIP_VERTICAL = 2;
@@ -73,16 +74,21 @@ class OFImage {
 	}
 
 	protected function flip( $mode ) {
-		if($mode == self::IMG_FLIP_VERTICAL || $mode == self::IMG_FLIP_BOTH)
+		if($mode == self::IMG_FLIP_VERTICAL || $mode == self::IMG_FLIP_BOTH) {
 			$this->resource = imagerotate($this->resource, 180, 0);
+			$this->dirty = TRUE;
+		}
 
-		if($mode == self::IMG_FLIP_HORIZONTAL || $mode == self::IMG_FLIP_BOTH)
+		if($mode == self::IMG_FLIP_HORIZONTAL || $mode == self::IMG_FLIP_BOTH) {
+			$this->dirty = TRUE;
 			$this->resource = imagerotate($this->resource, 90, 0);
+		}
 
 		return $this;
 	}
 
 	protected function rotate( $angle ) {
+		$this->dirty = TRUE;
 		$this->resource = imagerotate( $this->resource, $angle, 0 );
 		return $this;
 	}
@@ -125,6 +131,9 @@ class OFImage {
 	}
 
 	public function save( $dest ) {
-		return $this->saveImageResource( $dest );
+		if( $this->dirty )
+			return $this->saveImageResource( $dest );
+
+		return TRUE;
 	}
 }
