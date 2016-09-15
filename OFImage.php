@@ -24,7 +24,7 @@ class OFImage {
 	}
 
 	protected function readEXIF() {
-		$exif = read_exif_data( $this->filePath, 'IFD0' );
+		$exif = @read_exif_data( $this->filePath, 'IFD0' );
 
 		if( !$exif || !is_array( $exif ) )
 			return false;
