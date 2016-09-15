@@ -27,7 +27,8 @@ class OFImage {
 		$exif = read_exif_data( $this->filePath, 'IFD0' );
 
 		if( !$exif || !is_array( $exif ) )
-			throw new Exception( 'Unable to read EXIF data from image.' );
+			return false;
+			//throw new Exception( 'Unable to read EXIF data from image.' );
 
 		$this->exif = array_change_key_case( $exif, CASE_LOWER );
 	}
@@ -94,7 +95,8 @@ class OFImage {
 	}
 
 	public function fix() {
-		if( !array_key_exists( 'orientation', $this->exif ) ) 
+		
+		if( !$this->exif || ($this->exif && !array_key_exists( 'orientation', $this->exif ) ) )
 			return FALSE;
 
 		$imageOrientation = $this->exif['orientation'];
