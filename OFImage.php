@@ -35,7 +35,7 @@ class OFImage {
 
 	protected function loadImageResource() {
 		$img = NULL;
-		$ext = array_pop( explode( '.', $this->filePath ) );
+		$ext = strtolower( array_pop( explode( '.', $this->filePath ) ) );
 
 		switch ($ext) {
 			case 'jpg':
