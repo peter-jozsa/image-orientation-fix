@@ -28,7 +28,6 @@ class OFImage {
 
 		if( !$exif || !is_array( $exif ) )
 			return false;
-			//throw new Exception( 'Unable to read EXIF data from image.' );
 
 		$this->exif = array_change_key_case( $exif, CASE_LOWER );
 	}
@@ -56,7 +55,7 @@ class OFImage {
 	}
 
 	protected function saveImageResource( $dest ) {
-		$ext = array_pop( explode( '.', $this->filePath ) );
+		$ext = strtolower( array_pop( explode( '.', $this->filePath ) ) );
 
 		switch( $ext ) {
 			case 'png':
@@ -91,6 +90,7 @@ class OFImage {
 	protected function rotate( $angle ) {
 		$this->dirty = TRUE;
 		$this->resource = imagerotate( $this->resource, $angle, 0 );
+
 		return $this;
 	}
 
